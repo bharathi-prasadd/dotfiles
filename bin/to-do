@@ -1,0 +1,62 @@
+#!/usr/bin/zsh  
+
+#Empty dirs dont match the literal *
+setopt NULL_GLOB
+
+#Check if the file exists and if it doesnt create it
+FILE="/tmp/to-do.md"
+if [[ -f  $FILE ]]; then
+    echo -n "" > $FILE
+else
+    touch $FILE
+fi
+
+#Directory to search for to-do files in
+DIR="/home/rumi/Public/to_do/"
+
+# Print # signs (to indicate heading levels)
+print_hash() {
+    for ((i=0;i<=$1;i++));do
+        echo -n "#" >> $FILE
+    done
+}
+
+# Print hashes on both sides and print the file name in between
+print_name() {
+    print_hash $1
+    #Replace "_" with " " and add spaces before and after the
+    #Name (formatting purposes)
+    echo -n " "  ${2/_/\ } " "  >> $FILE
+    print_hash $1
+    echo "\n" >> $FILE
+}
+cat_dir() {
+    # Loop through each file in a directory and print its name
+    # and contents 
+    for file in "$1"/*; do
+        [[ -f $file ]] || continue
+        NAME="$(basename $file | cut -d . -f1)"
+        print_name $2 $NAME
+        cat $file >> $FILE
+        echo "\n" >> $FILE
+    done
+}
+
+#Loop through directories and if args are passed specifying 
+#directories, ensure only the ones specified are included
+for dir in $DIR*; do
+    #If no args are passed, add all directories
+    if [[ $# -eq 0 ]]; then
+        print_name 0 $(basename $dir)
+        cat_dir $dir 1
+    elif [[ "$1" == "$(basename $dir)" ]]; then
+        print_name 0 $(basename $dir)
+        cat_dir $dir 1
+    else
+        continue
+    fi
+done
+
+nvim $FILE
+
+~/bin/change_files.sh

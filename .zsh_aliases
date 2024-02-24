@@ -1,0 +1,28 @@
+# simplify cd .. and cd ...
+alias set ..="cd .."
+alias set ...="cd .. && cd .."
+
+alias too="cd ~/Public/to_do"
+# ls shortcuts
+alias ll='ls -l'
+alias la='ls -a'
+alias lla='ls -la'
+
+#nvim to vi
+alias set vi="nvim"
+
+#q to exit
+alias set q="exit"
+
+#c to clear
+alias set c="clear"
+
+#set python to python3
+alias set python="python3"
+
+alias set senv="source ~/bin/senv"
+
+#command to configure config repo
+alias set dotgit="git --git-dir=$HOME/.dotfiles --work-tree=$HOME"
+
+alias set oppo="sudo nmcli dev wifi connect 'OPPO Reno8 5G' > /dev/null"

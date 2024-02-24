@@ -1,0 +1,41 @@
+#!/usr/bin/zsh
+
+DIR=$(echo $PATH | cut -d ':' -f1)
+CUR=$(pwd)
+
+activate_env() {
+    source "$1/venv/bin/activate"
+    echo "Virtual environment activated at $1"
+}
+
+if [[ $DIR  != "/home/rumi/bin" ]]; then
+    deactivate
+    echo "Deactivating virtual environment at $DIR"
+else
+    while [[ $CUR != "/" ]]; do
+        if [[ -e "$CUR/venv"  ]]; then
+            echo -en "Activate virtual environment at $CUR [y/n]?"
+            read ANSWER
+            if [[ "$ANSWER" == "y" || "$ANSWER" == "yes" ]]; then
+                activate_env $CUR
+                break
+            elif [[ "$ANSWER" == "n" || "$ANSWER" == "no" ]]; then
+                CUR=$(dirname $CUR)
+            else 
+                echo "Unrecognized response, answer (y)es or (n)o"
+            fi
+        else
+            CUR=$(dirname $CUR) 
+        fi
+    done
+    if [[ $CUR == "/" ]]; then
+        echo -en "No virtual environment found\nWould you like to set one up[y/n]?"
+        read ANSWER
+        if [[ "$ANSWER" == "y" ]]; then
+	    python -m venv venv
+            activate_env $(pwd)
+        else
+            echo "Exiting"
+        fi
+    fi
+fi

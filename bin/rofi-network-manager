@@ -1,0 +1,5 @@
+SRC_DIR="~/Programs/rofi-network-manager"
+
+export PATH=$SRC_DIR:$PATH
+
+exec "$SRC_DIR/rofi-network-manager.sh"

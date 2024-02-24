@@ -1,0 +1,11 @@
+#!/usr/bin/zsh
+
+
+bluetoothctl power off
+
+if [[ "$EUID" -ne 0 ]]; then
+    sudo bluemoon -A
+fi
+
+bluetoothctl power on
+systemctl restart bluetooth.service
